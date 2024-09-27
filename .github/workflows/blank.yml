@@ -27,5 +27,5 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        if: startsWith(github.event.pull_request.head.ref, "feature/")
+        if: github.event.pull_request.head.ref == "feature/*"
         run: echo ${{ github.event.pull_request.head.ref }}, ${{ github.event.pull_request.base.ref }}
