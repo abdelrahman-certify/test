@@ -26,4 +26,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo ${{ github.GITHUB_BASE_RE }}, ${{ github.GITHUB_HEAD_REF }}
+        run: echo ${{ github.event.pull_request.head.ref }}, ${{ github.event.pull_request.base.ref }}
