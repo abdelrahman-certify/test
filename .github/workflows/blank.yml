@@ -43,10 +43,16 @@ jobs:
           regex: '[A-Za-z]{2,}-[0-9]+'
 
       - run: |
+          if [[ ${{ steps.regex-match.outputs.match }} == '' ]]; then
+            echo "No Jira Ticket in PR title, please include it"
+            exit 1
+          fi
+
+      - run: |
           echo ${{ steps.regex-match.outputs.match }}
           STATUS=$(curl --user ${{ secrets.JIRA_TOKEN }} "https://certifyos.atlassian.net/rest/api/2/issue/${{ steps.regex-match.outputs.match }}?fields=status" | jq -r '.fields.status.name')
           if [[ $STATUS == "Done" ]]; then
-            echo "Done status"
+            echo "Done status, continuing" 
           else
             echo "Status not done, failing"
             exit 1
@@ -54,4 +60,8 @@ jobs:
         if: ${{ steps.regex-match.outputs.match != '' }}
 
       - run: echo hi
-          
+  run:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - run: echo bye
