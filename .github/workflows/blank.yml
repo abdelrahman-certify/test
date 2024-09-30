@@ -52,4 +52,6 @@ jobs:
             exit 1
           fi
         if: ${{ steps.regex-match.outputs.match != '' }}
+
+      - run: echo hi
           
