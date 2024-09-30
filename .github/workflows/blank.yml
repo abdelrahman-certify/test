@@ -46,12 +46,14 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           debug: true
+          env:
+            body: "Please add Jira Ticket number in title"
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `👋 Thanks for reporting!`
+              body: process.env.body
             })
             # process.exit(1);
         if: ${{ steps.regex-match.outputs.match == '' }}
