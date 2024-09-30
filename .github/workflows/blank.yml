@@ -88,7 +88,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "${{ steps.regex-match.outputs.match }} is in Done status. Can't create merge PR's for Done tickets"
+              body: "${{ steps.regex-match.outputs.match }} is in Done status. Can't merge PR's for Done tickets"
             })
             process.exit(1)
 
