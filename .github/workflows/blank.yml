@@ -34,7 +34,7 @@ jobs:
           echo ${{ github.ref_name }}
           echo ${{ github.event.pull_request.title}}
           if [[ "${{ github.event.pull_request.title}}" =~ [A-Za-z]{2,}-[0-9]+ ]]; then
-            
+            echo passes
           else
             echo fails
           fi
