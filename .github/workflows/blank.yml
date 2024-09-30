@@ -43,11 +43,11 @@ jobs:
           regex: '[A-Za-z]{2,}-[0-9]+'
 
       - uses: actions/github-script@v5
+        env:
+          body: "Please add jira ticket number to PR title"
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           debug: true
-          env:
-            body: "Please add Jira Ticket number in title"
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
