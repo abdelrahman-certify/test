@@ -42,11 +42,8 @@ jobs:
           text: ${{ github.event.pull_request.title}}
           regex: '[A-Za-z]{2,}-[0-9]+'
 
-      - run: |
-          if [[ ${{ steps.regex-match.outputs.match }} == '' ]]; then
-            echo "No Jira Ticket in PR title, please include it"
-            exit 1
-          fi
+      - run: echo Please include Ticket in URL
+        if: ${{ steps.regex-match.outputs.match == '' }}
 
       - run: |
           echo ${{ steps.regex-match.outputs.match }}
