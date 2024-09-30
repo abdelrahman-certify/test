@@ -80,6 +80,7 @@ jobs:
         if: ${{ steps.regex-match.outputs.match != '' }}
 
       - uses: actions/github-script@v7
+        if: ${{ steps.check_jira.outputs.status == "fail" }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -90,7 +91,6 @@ jobs:
               body: "${{ steps.regex-match.outputs.match }} is in Done status. Can't create merge PR's for Done tickets"
             })
             process.exit(1)
-        if: ${{ steps.check_jira.outputs.status == "fail" }}
 
       - run: echo hi
   run:
