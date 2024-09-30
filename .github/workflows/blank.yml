@@ -44,7 +44,7 @@ jobs:
 
       - run: |
           echo ${{ steps.regex-match.outputs.match }}
-          STATUS=$(curl --user ${{ secrets.JIRA_TOKEN }} "https://certifyos.atlassian.net/rest/api/2/issue/${{ steps.regex-match.outputs.match }}?fields=status" | jq '.fields.status.name')
+          STATUS=$(curl --user ${{ secrets.JIRA_TOKEN }} "https://certifyos.atlassian.net/rest/api/2/issue/${{ steps.regex-match.outputs.match }}?fields=status" | jq -r '.fields.status.name')
           if [[ $STATUS == "Done" ]]; then
             echo "Done status"
           else
