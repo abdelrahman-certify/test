@@ -71,10 +71,10 @@ jobs:
           STATUS=$(curl --user ${{ secrets.JIRA_TOKEN }} "https://certifyos.atlassian.net/rest/api/2/issue/${{ steps.regex-match.outputs.match }}?fields=status" | jq -r '.fields.status.name')
           if [[ $STATUS == "Done" ]]; then
             echo "Done status, failing"
-            status="fail" >> $GITHUB_OUTPUT
+            echo "status=fail" >> $GITHUB_OUTPUT
           else
             echo "Status not done, continuing"
-            status="pass" >> $GITHUB_OUTPUT
+            echo "status=pass" >> $GITHUB_OUTPUT
             exit 1
           fi
         if: ${{ steps.regex-match.outputs.match != '' }}
