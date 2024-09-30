@@ -42,7 +42,7 @@ jobs:
           text: ${{ github.event.pull_request.title}}
           regex: '[A-Za-z]{2,}-[0-9]+'
 
-      - run: echo Please include Ticket in URL
+      - run: echo Please include Ticket in URL && exit 1
         if: ${{ steps.regex-match.outputs.match == '' }}
 
       - run: |
