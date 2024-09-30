@@ -64,16 +64,33 @@ jobs:
             process.exit(1)
         if: ${{ steps.regex-match.outputs.match == '' }}
 
-      - run: |
+      - name: 'Check Status of Ticket in Jira'
+        id: check_jira
+        run: |
           echo ${{ steps.regex-match.outputs.match }}
           STATUS=$(curl --user ${{ secrets.JIRA_TOKEN }} "https://certifyos.atlassian.net/rest/api/2/issue/${{ steps.regex-match.outputs.match }}?fields=status" | jq -r '.fields.status.name')
           if [[ $STATUS == "Done" ]]; then
-            echo "Done status, continuing" 
+            echo "Done status, continuing"
+            status="pass" >> $GITHUB_OUTPUT
           else
             echo "Status not done, failing"
+            status="fail" >> $GITHUB_OUTPUT
             exit 1
           fi
         if: ${{ steps.regex-match.outputs.match != '' }}
+
+      - uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "${{ steps.regex-match.outputs.match }} is in Done status. Can't create merge PR's for Done tickets"
+            })
+            process.exit(1)
+        if: ${{ steps.check_jira.outputs.status == "fail" }}
 
       - run: echo hi
   run:
