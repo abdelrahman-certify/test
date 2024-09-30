@@ -38,4 +38,12 @@ jobs:
           else
             echo fails
           fi
+      - uses: KyoriPowered/action-regex-match@v3
+        id: regex-match
+        with:
+          text: ${{ github.event.pull_request.title}}
+          regex: '[A-Za-z]{2,}-[0-9]+'
+
+      - run: |
+          echo ${{ steps.regex-match.outputs.group1 }} ${{ steps.regex-match.outputs.match }}
           
