@@ -26,4 +26,10 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo ${{ github.event.pull_request.title}}
+        run: |
+          if [[ ${{ github.event.pull_request.title}} =~ [A-Za-z]{2}-[0-9]* ]]; then
+            echo passes
+          else
+            echo fails
+          fi
+          
