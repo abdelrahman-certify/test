@@ -4,6 +4,8 @@ name: CI
 
 # Controls when the workflow will run
 on:
+  push:
+    branches: ["feature/*"]
   pull_request:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   # push:
@@ -29,9 +31,10 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: |
+          echo ${{ github.ref_name }}
           echo ${{ github.event.pull_request.title}}
-          if [[ "${{ github.event.pull_request.title}}" =~ [A-Za-z]{2,}-\d+ ]]; then
-            echo passes
+          if [[ "${{ github.event.pull_request.title}}" =~ [A-Za-z]{2,}-[0-9]+ ]]; then
+            
           else
             echo fails
           fi
