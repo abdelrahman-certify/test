@@ -94,7 +94,7 @@ jobs:
       - run: echo hi
   run:
     runs-on: ubuntu-latest
-    if: ${{ github.event.action == "edited" }}
+    # if: ${{ github.event.action == 'edited' }}
     needs: [build]
     steps:
       - run: echo bye
