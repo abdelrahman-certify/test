@@ -5,7 +5,6 @@ name: CI
 # Controls when the workflow will run
 on:
   pull_request:
-    types: [edited]
   # Triggers the workflow on push or pull request events but only for the "main" branch
   # push:
   #   branches: ["feature/*"]
@@ -35,6 +34,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
+        if: ${{ !startsWith(github.head_ref, 'release')
         run: |
           echo ${{ github.head_ref }}
           echo ${{ github.event.pull_request.title}}
