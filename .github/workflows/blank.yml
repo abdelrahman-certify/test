@@ -35,7 +35,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: |
-          echo ${{ github.ref_name }}
+          echo ${{ github.head_ref }}
           echo ${{ github.event.pull_request.title}}
           if [[ "${{ github.event.pull_request.title}}" =~ [A-Za-z]{2,}-[0-9]+ ]]; then
             echo passes
