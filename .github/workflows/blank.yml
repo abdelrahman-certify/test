@@ -94,6 +94,7 @@ jobs:
   run:
     runs-on: ubuntu-latest
     # if: ${{ github.event.action == 'edited' }}
+    if: always() && !failure() && !cancelled()
     needs: [build]
     steps:
       - run: echo bye
