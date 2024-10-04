@@ -20,7 +20,7 @@ jobs:
     # #if: startsWith(${{ github.event.pull_request.head.ref }}, "feature/")
     # if: ${{ startsWith(github.event.pull_request.head.ref, 'feature/') }}
     runs-on: ubuntu-latest
-    if: "!(startsWith(github.head_ref, 'feature/'))"
+    # if: "!(startsWith(github.head_ref, 'feature/'))"
     
     permissions:
       pull-requests: write
@@ -37,7 +37,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: |
-          echo ${{ github.head_ref }}
+          echo ${{ github.event.action }}
           echo ${{ github.event.pull_request.title}}
           if [[ "${{ github.event.pull_request.title}}" =~ [A-Za-z]{2,}-[0-9]+ ]]; then
             echo passes
@@ -94,6 +94,7 @@ jobs:
       - run: echo hi
   run:
     runs-on: ubuntu-latest
+    if: ${{ github.event.action == "edited" }}
     needs: [build]
     steps:
       - run: echo bye
