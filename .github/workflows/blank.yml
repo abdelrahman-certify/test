@@ -18,7 +18,7 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    if: contains(github.event.pull_request.labels.*.name, 'bug') && startsWith(${{ github.event.pull_request.head.ref }}, "feature/")
+    if: !contains(github.event.pull_request.labels.*.name, 'bug') && startsWith(${{ github.event.pull_request.head.ref }}, "feature/")
     # The type of runner that the job will run on
     # #if: startsWith(${{ github.event.pull_request.head.ref }}, "feature/")
     runs-on: ubuntu-latest
