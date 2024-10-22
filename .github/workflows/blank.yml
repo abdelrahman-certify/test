@@ -5,6 +5,8 @@ name: CI
 # Controls when the workflow will run
 on:
   pull_request:
+    types: [labeled, synchronize, unlabeled]
+    
   # Triggers the workflow on push or pull request events but only for the "main" branch
   # push:
   #   branches: ["feature/*"]
@@ -36,13 +38,9 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: |
-          echo ${{ github.event.action }}
-          echo ${{ github.event.pull_request.title}}
-          if [[ "${{ github.event.pull_request.title}}" =~ [A-Za-z]{2,}-[0-9]+ ]]; then
-            echo passes
-          else
-            echo fails
-          fi
+          echo ${{ github.head_ref }}
+          echo ${{ github.event.action}}
+
       - uses: KyoriPowered/action-regex-match@v3
         id: regex-match
         with:
