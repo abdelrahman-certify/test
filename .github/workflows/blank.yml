@@ -52,4 +52,4 @@ jobs:
           echo ${{steps.regex-matcha.outputs.match}}
           echo ${{ github.head_ref }}
           echo ${{ github.event.action}}
-          echo release_url=https://xxx.example.com >> $GITHUB_OUTPUT
+          echo deployment_url=https://xxx.example.com >> $GITHUB_OUTPUT
