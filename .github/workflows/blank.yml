@@ -50,5 +50,4 @@ jobs:
           echo ${{steps.regex-matcha.outputs.match}}
           echo ${{ github.head_ref }}
           echo ${{ github.event.action}}
-          echo "new_page_url=https://testing.com" >> $GITHUB_OUTPUT
-
+          echo release_url=https://xxx.example.com >> $GITHUB_OUTPUT
