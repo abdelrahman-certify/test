@@ -25,7 +25,8 @@ jobs:
     # if: "!(startsWith(github.head_ref, 'feature/'))"
     environment:
       name: "staging"
-      url: "https://willchange.com"
+      url: ${{ steps.aaa.outputs.release_url }}
+
     permissions:
       pull-requests: write
       contents: 'read'
@@ -48,8 +49,9 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
+        id: aaa
         run: |
           echo ${{steps.regex-matcha.outputs.match}}
           echo ${{ github.head_ref }}
           echo ${{ github.event.action}}
-          echo deployment_url=https://xxx.example.com >> $GITHUB_OUTPUT
+          echo release_url=https://xxx.example.com >> $GITHUB_OUTPUT
