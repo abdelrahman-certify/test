@@ -34,6 +34,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
+      - uses: KyoriPowered/action-regex-match@v3
+        id: regex-match
+        with:
+          text: ${{ github.event.pull_request.title}}
+          regex: 'CP(-| )[0-9]+'
+
       # Runs a single command using the runners shell
       - name: Run a one-line script
         if: ${{ startsWith(github.head_ref, "feature/") != true }}
