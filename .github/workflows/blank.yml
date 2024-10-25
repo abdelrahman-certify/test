@@ -18,10 +18,15 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
+    if: "contains(github.event.pull_request.labels.*.name, 'bug') && startsWith(github.event.pull_request.head.ref, 'feature/')"
     # The type of runner that the job will run on
     # #if: startsWith(${{ github.event.pull_request.head.ref }}, "feature/")
-    # if: ${{ startsWith(github.event.pull_request.head.ref, 'feature/') }}
     runs-on: ubuntu-latest
+    # if: "!(startsWith(github.head_ref, 'feature/'))"
+    environment:
+      name: "staging"
+      url: ${{ steps.aaa.outputs.release_url }}
+
     permissions:
       pull-requests: write
       contents: 'read'
@@ -33,6 +38,14 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
+      
+
+      - uses: KyoriPowered/action-regex-match@v3
+        id: regex-matcha
+        with:
+          text: ${{ github.event.pull_request.title}}
+          regex: 'CP(-| )[0-9]+'
+          flags: i
 
       - uses: KyoriPowered/action-regex-match@v3
         id: regex-match
@@ -42,7 +55,9 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        if: ${{ startsWith(github.head_ref, "feature/") != true }}
+        id: aaa
         run: |
+          echo ${{steps.regex-matcha.outputs.match}}
           echo ${{ github.head_ref }}
           echo ${{ github.event.action}}
+          echo release_url=https://xxx.example.com >> $GITHUB_OUTPUT
