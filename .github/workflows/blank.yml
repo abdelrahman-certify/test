@@ -38,7 +38,7 @@ jobs:
       
 
       - uses: KyoriPowered/action-regex-match@v3
-        id: regex-match
+        id: regex-matcha
         with:
           text: ${{ github.event.pull_request.title}}
           regex: '/CP(-| )[0-9]+/i'
@@ -46,7 +46,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: |
-          echo ${{steps.regex-match.outputs.match}}
+          echo ${{steps.regex-matcha.outputs.match}}
           echo ${{ github.head_ref }}
           echo ${{ github.event.action}}
 
