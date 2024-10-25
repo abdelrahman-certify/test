@@ -41,7 +41,7 @@ jobs:
         id: regex-matcha
         with:
           text: ${{ github.event.pull_request.title}}
-          regex: '/CP(-| )[0-9]+/i'
+          regex: 'CP(-| )[0-9]+'
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
