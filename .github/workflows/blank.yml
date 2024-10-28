@@ -42,7 +42,6 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        if: ${{ startsWith(github.head_ref, "feature/") != true }}
         run: |
           echo ${{ github.head_ref }}
           echo ${{ github.event.action}}
