@@ -5,7 +5,8 @@ name: CI
 # Controls when the workflow will run
 on:
   pull_request:
-    
+    types: [opened, synchronize, reopened, labeled]
+
   # Triggers the workflow on push or pull request events but only for the "main" branch
   # push:
   #   branches: ["feature/*"]
@@ -26,7 +27,6 @@ jobs:
       contents: 'read'
       id-token: 'write'
       actions: 'read'
-
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
