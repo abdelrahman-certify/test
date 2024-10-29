@@ -5,7 +5,6 @@ name: CI
 # Controls when the workflow will run
 on:
   pull_request:
-    types: [opened, closed]
     
   # Triggers the workflow on push or pull request events but only for the "main" branch
   # push:
