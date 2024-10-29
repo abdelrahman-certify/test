@@ -20,7 +20,7 @@ jobs:
   build:
     # The type of runner that the job will run on
     # #if: startsWith(${{ github.event.pull_request.head.ref }}, "feature/")
-    if: ${{ startsWith(github.event.pull_request.head.ref, 'feature/') && (startsWith(github.event.pull_request.head.ref, 'feature/') ||  startsWith(github.event.pull_request.base.head, 'test'))}}
+    if: ${{ startsWith(github.event.pull_request.head.ref, 'feature/') && (startsWith(github.event.pull_request.head.ref, 'feature/') ||  startsWith(github.event.pull_request.head.refg, 'test'))}}
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
