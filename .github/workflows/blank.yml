@@ -50,3 +50,4 @@ jobs:
           echo ${{ github.event.action}}
           echo ${{ github.event}}
           echo ${{ github.ref_name}}
+          echo ${{ github.ref}}
