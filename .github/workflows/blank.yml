@@ -62,12 +62,14 @@ jobs:
     steps:
       - name: Run a one-line script
         continue-on-error: true
-        env:
-          result: ${{ needs.build.result == failure }}
         run: |
-          echo ${{ env.result }}
+          SUCCESS="False"
+          if [[ ${{ needs.build.result }} == "success" ]]; then
+            SUCCESS="True"
+          fi
           RELEASE=$(echo ${{ github.ref_name }} | cut -d '/' -f 2)
           echo RELEASE=$RELEASE >> $GITHUB_ENV
+          echo SUCCESS=$SUCCESS >> $GITHUB_ENV
           exit 1
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -78,3 +80,4 @@ jobs:
           echo ${{ github.event.action}}
           echo repo_full ${{ github.event.repository.name }}
           echo release ${{ env.RELEASE }}
+          echo success ${{ env.SUCCESS }}
