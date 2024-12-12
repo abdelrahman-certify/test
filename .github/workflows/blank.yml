@@ -63,7 +63,7 @@ jobs:
       - name: Run a one-line script
         continue-on-error: true
         run: |
-          echo ${{needs.build.result }}
+          echo ${{needs.build.result == "failure" }}
           RELEASE=$(echo ${{ github.ref_name }} | cut -d '/' -f 2)
           echo RELEASE=$RELEASE >> $GITHUB_ENV
           exit 1
