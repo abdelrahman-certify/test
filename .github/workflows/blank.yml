@@ -35,10 +35,8 @@ jobs:
 
     steps:
       - name: Run a one-line script
-        id: release-checkout
         run: |
-          RELEASE=$(echo ${{ github.ref_name }} | cut -d '/' -f 2)
-          echo RELEASE=$RELEASE >> $GITHUB_ENV
+          exit 1
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
@@ -48,11 +46,22 @@ jobs:
       #   with:
       #     text: ${{ github.event.pull_request.title}}
       #     regex: 'CP(-| )[0-9]+'
-
+        # This workflow contains a single job called "build"
+  test:
+      # The type of runner that the job will run on
+      # #if: startsWith(${{ github.event.pull_request.head.ref }}, "feature/")
+      # if: "(!contains(github.event.pull_request.labels.*.name, 'deploy-to-feature') ||  github.event.action == 'closed') && (startsWith(github.event.pull_request.head.ref, 'bug/') || startsWith(github.event.pull_request.head.ref, 'feature/'))"
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: 'read'
+      id-token: 'write'
+      actions: 'read'
+    steps:
       - name: Run a one-line script
         continue-on-error: true
         run: |
-          echo ${{steps.release-checkout.outcome }}
+          echo ${{needs.deploy.result }}
           RELEASE=$(echo ${{ github.ref_name }} | cut -d '/' -f 2)
           echo RELEASE=$RELEASE >> $GITHUB_ENV
           exit 1
