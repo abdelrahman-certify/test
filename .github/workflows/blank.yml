@@ -33,7 +33,21 @@ jobs:
       id-token: 'write'
       actions: 'read'
 
+    steps:
+      - name: Run a one-line script
+        run: |
+          echo ${{success()}}
+          RELEASE=$(echo ${{ github.ref_name }} | cut -d '/' -f 2)
+          echo RELEASE=$RELEASE >> $GITHUB_ENV
+          exit 1
 
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: 'read'
+      id-token: 'write'
+      actions: 'read'
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
