@@ -36,7 +36,7 @@ jobs:
     steps:
       - name: Run a one-line script
         run: |
-          exit 1
+          echo hi
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
