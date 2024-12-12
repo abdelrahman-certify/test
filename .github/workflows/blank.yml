@@ -36,7 +36,6 @@ jobs:
     steps:
       - name: Run a one-line script
         id: release-checkout
-        continue-on-error: true
         run: |
           RELEASE=$(echo ${{ github.ref_name }} | cut -d '/' -f 2)
           echo RELEASE=$RELEASE >> $GITHUB_ENV
@@ -51,6 +50,7 @@ jobs:
       #     regex: 'CP(-| )[0-9]+'
 
       - name: Run a one-line script
+        continue-on-error: true
         run: |
           echo ${{steps.release-checkout.outcome }}
           RELEASE=$(echo ${{ github.ref_name }} | cut -d '/' -f 2)
@@ -64,4 +64,4 @@ jobs:
           echo ${{ github.head_ref }}
           echo ${{ github.event.action}}
           echo repo_full ${{ github.event.repository.name }}
-          echp ${{ env.RELEASE }}
+          echo ${{ env.RELEASE }}
