@@ -51,6 +51,7 @@ jobs:
       #     regex: 'CP(-| )[0-9]+'
 
       - name: Run a one-line script
+        if: ${{ !cancelled() }}
         run: |
           echo ${{steps.release-checkout.outcome }}
           RELEASE=$(echo ${{ github.ref_name }} | cut -d '/' -f 2)
