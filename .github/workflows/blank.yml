@@ -35,21 +35,13 @@ jobs:
 
     steps:
       - name: Run a one-line script
+        id: release-checkout
+        continue-on-error: true
         run: |
           echo ${{success()}}
           RELEASE=$(echo ${{ github.ref_name }} | cut -d '/' -f 2)
           echo RELEASE=$RELEASE >> $GITHUB_ENV
-          exit 1
 
-  test:
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-      contents: 'read'
-      id-token: 'write'
-      actions: 'read'
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
@@ -61,7 +53,7 @@ jobs:
 
       - name: Run a one-line script
         run: |
-          echo ${{success()}}
+          echo ${{steps.release-checkout.outcome }}
           RELEASE=$(echo ${{ github.ref_name }} | cut -d '/' -f 2)
           echo RELEASE=$RELEASE >> $GITHUB_ENV
           exit 1
