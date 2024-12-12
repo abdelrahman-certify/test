@@ -71,6 +71,12 @@ jobs:
           echo RELEASE=$RELEASE >> $GITHUB_ENV
           echo SUCCESS=$SUCCESS >> $GITHUB_ENV
           exit 1
+
+      - uses: KyoriPowered/action-regex-match@v3
+        id: regex-match
+        with:
+          text: ${{env.SUCCESS }}
+          regex: 'CP(-| )[0-9]+'
       # Runs a single command using the runners shell
       - name: Run a one-line script
         if: ${{ !cancelled() }}
