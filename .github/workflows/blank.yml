@@ -51,5 +51,5 @@ jobs:
           echo ${{ github.event.action }} hiii ${{ github.event.pull_request.action }}
           echo ${{ github.head_ref }}
           echo ${{ github.event.action}}
-          echo repo_full ${{ github.event.repository.full_name }}
+          echo repo_full ${{ github.event.repository.name }}
           echo repo ${{ github.repository }}
