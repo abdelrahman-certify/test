@@ -52,6 +52,7 @@ jobs:
       # #if: startsWith(${{ github.event.pull_request.head.ref }}, "feature/")
       # if: "(!contains(github.event.pull_request.labels.*.name, 'deploy-to-feature') ||  github.event.action == 'closed') && (startsWith(github.event.pull_request.head.ref, 'bug/') || startsWith(github.event.pull_request.head.ref, 'feature/'))"
     runs-on: ubuntu-latest
+    needs: [build]
     permissions:
       pull-requests: write
       contents: 'read'
