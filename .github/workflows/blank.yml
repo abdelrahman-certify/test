@@ -61,7 +61,7 @@ jobs:
         env:
           NEW_VERSION: ${{ env.NEW_VERSION }}
         with:
-          secret: ${{ github.TOKEN }}
+          secret: ${{ secrets.MY_TOKEN }}
           approvers: ${{ github.actor }}
           minimum-approvals: 1
           issue-title: Deploying ${{ env.NEW_VERSION }} to production
