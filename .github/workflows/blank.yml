@@ -54,6 +54,7 @@ jobs:
           PREFIX=$(echo $TYPE/$DATE)
           LATEST_RELEASE=$(git ls-remote --tags --sort=committerdate | grep -o "$TYPE/.*" | tail -1)
           NEW_VERSION=$(python scripts/versioning.py -p $PREFIX -v $LATEST_RELEASE)
+          echo $PREFIX
           echo $NEW_VERSION
           echo NEW_VERSION=$NEW_VERSION >> $GITHUB_ENV
       - name: Create tag
