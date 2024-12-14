@@ -18,6 +18,13 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      type:
+        type: choice
+        description: Is this a release candidate (rc) or hotfix
+        options:
+        - rc
+        - hotfix
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -34,14 +41,19 @@ jobs:
       actions: 'read'
 
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Run a one-line script
+        env:
+          TYPE: ${{ inputs.type }}
         run: |
           export TZ=America/New_York
-          date
-          date '+%Y.%m.%d'
-
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+          DATE=$(date '+%Y.%m.%d')
+          PREFIX=$(echo $TYPE/$DATE)
+          LATEST_RELEASE=$(git ls-remote --tags --sort=committerdate | grep -o "$TYPE/.*" | tail -1)
+          NEW_VERSION=$(python scripts/versioning.py -p $PREFIX -v $LATEST_RELEASE)
+          echo $NEW_VERSION
 
       # - uses: KyoriPowered/action-regex-match@v3
       #   id: regex-match
