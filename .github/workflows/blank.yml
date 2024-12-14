@@ -55,7 +55,8 @@ jobs:
           LATEST_RELEASE=$(git ls-remote --tags --sort=committerdate | grep -o "$TYPE/.*" | tail -1)
           NEW_VERSION=$(python scripts/versioning.py -p $PREFIX -v $LATEST_RELEASE)
           echo $NEW_VERSION
-          git config --global --add url."https://$TOKEN:x-oauth-basic@github.com/".insteadOf "git@github.com:"
+          git config --global credential.helper store
+          echo "https://x-access-token:$TOKEN@github.com" > ~/.git-credentials
           git tag $NEW_VERSION $COMMIT
           git push origin --tags
 
