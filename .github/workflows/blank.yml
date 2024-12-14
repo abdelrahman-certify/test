@@ -42,12 +42,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.MY_TOKEN }}
           fetch-depth: 0
       - name: Run a one-line script
         env:
           TYPE: ${{ inputs.type }}
           COMMIT: ${{ inputs.commit }}
+          TOKEN: ${{ secrets.MY_TOKEN }}
         run: |
           export TZ=America/New_York
           DATE=$(date '+%Y.%m.%d')
@@ -55,6 +55,7 @@ jobs:
           LATEST_RELEASE=$(git ls-remote --tags --sort=committerdate | grep -o "$TYPE/.*" | tail -1)
           NEW_VERSION=$(python scripts/versioning.py -p $PREFIX -v $LATEST_RELEASE)
           echo $NEW_VERSION
+          git config --global --add url."https://$TOKEN:x-oauth-basic@github.com/".insteadOf "git@github.com:"
           git tag $NEW_VERSION $COMMIT
           git push origin --tags
 
