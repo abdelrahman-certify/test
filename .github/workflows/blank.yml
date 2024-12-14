@@ -33,6 +33,8 @@ jobs:
     # #if: startsWith(${{ github.event.pull_request.head.ref }}, "feature/")
     # if: "(!contains(github.event.pull_request.labels.*.name, 'deploy-to-feature') ||  github.event.action == 'closed') && (startsWith(github.event.pull_request.head.ref, 'bug/') || startsWith(github.event.pull_request.head.ref, 'feature/'))"
     runs-on: ubuntu-latest
+    outputs:
+        new_version: ${{ steps.get-version.outputs.new_version }}
     permissions:
       pull-requests: write
       contents: 'write'
@@ -44,6 +46,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Run a one-line script
+        id: get-version
         env:
           TYPE: ${{ inputs.type }}
           COMMIT: ${{ inputs.commit }}
@@ -56,33 +59,7 @@ jobs:
           NEW_VERSION=$(python scripts/versioning.py -p $PREFIX -v $LATEST_RELEASE)
           echo $PREFIX
           echo $NEW_VERSION
-          echo NEW_VERSION=$NEW_VERSION >> $GITHUB_ENV
-      - uses: trstringer/manual-approval@v1
-        env:
-          NEW_VERSION: ${{ env.NEW_VERSION }}
-        with:
-          secret: ${{ secrets.MY_TOKEN }}
-          approvers: ${{ github.actor }}
-          minimum-approvals: 1
-          issue-title: Deploying ${{ env.NEW_VERSION }} to production
-          issue-body: Please approve or deny the deployment of version ${{ env.NEW_VERSION  }}
-          exclude-workflow-initiator-as-approver: false
-          additional-approved-words: ''
-          additional-denied-words: ''
-      - name: Create tag
-        uses: actions/github-script@v6
-        env:
-          NEW_VERSION: ${{ env.NEW_VERSION }}
-          SHA: ${{ inputs.commit }}
-        with:
-          github-token: ${{ secrets.MY_TOKEN }}
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: `refs/tags/${process.env.NEW_VERSION}`,
-              sha: process.env.SHA
-            })
+          echo new_version=$NEW_VERSION >> $GITHUB_OUTPUT
 
       # - uses: KyoriPowered/action-regex-match@v3
       #   id: regex-match
@@ -96,37 +73,25 @@ jobs:
       # if: "(!contains(github.event.pull_request.labels.*.name, 'deploy-to-feature') ||  github.event.action == 'closed') && (startsWith(github.event.pull_request.head.ref, 'bug/') || startsWith(github.event.pull_request.head.ref, 'feature/'))"
     runs-on: ubuntu-latest
     needs: [build]
+    environment: 'staging'
     if: ${{ !cancelled() }}
     permissions:
       pull-requests: write
-      contents: 'read'
+      contents: 'write'
       id-token: 'write'
-      actions: 'read'
+      actions: 'write'
     steps:
-      - name: Run a one-line script
-        continue-on-error: true
-        run: |
-          SUCCESS="False"
-          if [[ ${{ needs.build.result }} == "success" ]]; then
-            SUCCESS="True"
-          fi
-          RELEASE=$(echo ${{ github.ref_name }} | cut -d '/' -f 2)
-          echo RELEASE=$RELEASE >> $GITHUB_ENV
-          echo SUCCESS=$SUCCESS >> $GITHUB_ENV
-          exit 1
-
-      - uses: KyoriPowered/action-regex-match@v3
-        id: regex-match
+      - name: Create tag
+        uses: actions/github-script@v6
+        env:
+          NEW_VERSION: ${{ needs.build.outputs.new_version }}
+          SHA: ${{ inputs.commit }}
         with:
-          text: ${{env.SUCCESS }}
-          regex: 'CP(-| )[0-9]+'
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        if: ${{ !cancelled() }}
-        run: |
-          echo ${{ github.event.action }} hiii ${{ github.event.pull_request.action }}
-          echo ${{ github.head_ref }}
-          echo ${{ github.event.action}}
-          echo repo_full ${{ github.event.repository.name }}
-          echo release ${{ env.RELEASE }}
-          echo success ${{ env.SUCCESS }}
+          github-token: ${{ secrets.MY_TOKEN }}
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${process.env.NEW_VERSION}`,
+              sha: process.env.SHA
+            })
