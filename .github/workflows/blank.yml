@@ -36,7 +36,7 @@ jobs:
     steps:
       - name: Run a one-line script
         run: |
-          TZ=America/New_York
+          export TZ=America/New_York
           date
           date
 
