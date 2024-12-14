@@ -38,7 +38,7 @@ jobs:
         run: |
           export TZ=America/New_York
           date
-          date
+          date '+%Y.%m.%d'
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
