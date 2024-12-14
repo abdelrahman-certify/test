@@ -57,6 +57,18 @@ jobs:
           echo $PREFIX
           echo $NEW_VERSION
           echo NEW_VERSION=$NEW_VERSION >> $GITHUB_ENV
+      - uses: trstringer/manual-approval@v1
+        env:
+          NEW_VERSION: ${{ env.NEW_VERSION }}
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: ${{ github.actor }}
+          minimum-approvals: 1
+          issue-title: Deploying ${{ env.NEW_VERSION }} to production
+          issue-body: Please approve or deny the deployment of version ${{ env.NEW_VERSION  }}
+          exclude-workflow-initiator-as-approver: false
+          additional-approved-words: ''
+          additional-denied-words: ''
       - name: Create tag
         uses: actions/github-script@v6
         env:
